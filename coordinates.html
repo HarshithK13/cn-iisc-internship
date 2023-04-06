@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Get coordinates from Leaflet</title>
+    <meta charset='utf8'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+   crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+   integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+   crossorigin=""></script>
+   <style>
+       .wrapper {
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  
+  #map {
+    height: 1580px;
+    width: 19500px;
+  }
+  
+  #info {
+    width: 500px;
+  }
+   </style>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="map">
+
+      </div> 
+      <div id="info">
+        <p>
+        Selected coords:
+          <p>Lon: <span id='lon'></span></p>
+          <p>Lat: <span id='lat'></span></p>
+        </p>
+      </div>
+    </div>
+    <script>
+        $(document).ready(init);
+
+function init() {
+var mymap = L.map('map').setView([26.47452,73.115], 15),
+  lonSpan = $('#lon'),
+  latSpan = $('#lat');
+
+L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: ['a','b','c']
+}).addTo( mymap );
+
+var marker = L.marker([26.47452,73.115]).addTo(mymap);
+
+mymap.on('click', function(e) {
+  lonSpan.text(e.latlng.lng)
+  latSpan.text(e.latlng.lat)
+  marker.setLatLng(e.latlng)
+});
+}
+    </script>
+  </body>
+</html>

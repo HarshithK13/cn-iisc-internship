@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.pmalatest/dist/leaflet.pm.css" />
+    <link rel="'stylesheet" href="nouislider.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet. markercluster@1.3.0/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="'stylesheet" href="https://unpkg.com/leaflet.markercluster@1,3.0/dist/MarkerCluster.Default.css"/>
+    <script type="text/javascript" src="MovingMarker.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <style>
+      #map {position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+      
+    </style>
+    <!-- <a href="https://www.flaticon.com/free-icons/map-marker" title="map marker icons">Map marker icons created by Freepik - Flaticon</a> -->
+  </head>
+  <body>
+    <div id="map">
+
+    </div>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+      var map = L.map('map', {
+    center: [26.47452,73.115],
+    zoom: 15.6
+});
+
+
+      L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=96s2uc8tHryEc9jfNqir',{
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 4,
+        maxZoom: 30,
+        crossOrigin: true
+      }).addTo(map);
+
+      var car = L.icon({
+        iconUrl: 'car.png',
+        iconSize: [40, 40], // size of the icon
+      });
+
+      var bicycle = L.icon({
+        iconUrl: 'bicycle.png',
+        iconSize: [20, 20], // size of the icon
+      });
+
+      var man = L.icon({
+        iconUrl: 'man.png',
+        iconSize: [20, 20], // size of the icon
+      });
+
+      var bike = L.icon({
+        iconUrl: 'fast-delivery.png',
+        iconSize: [20, 20], // size of the icon
+      });
+
+      var redIcon = L.icon({
+        iconUrl: 'red.png',
+        iconSize: [30, 30], // size of the icon
+      });
+
+
+
+      var marker = L.marker([26.465895749384593, 73.1151375786186], {icon:car}).addTo(map);
+      var marker2 = L.marker([26.47336296840691, 73.11549274391665], {icon:redIcon}).addTo(map);
+      var marker3 = L.marker([26.46623190470775, 73.11196505676078],{icon:bicycle}).addTo(map);    //26.46623190470775, 73.11196505676078
+      var marker4 = L.marker([26.47336296840691, 73.11549274391665], {icon:redIcon}).addTo(map); //26.472489016685753, 73.11527823273175
+      var marker5 = L.marker([26.472489016685753, 73.11527823273175], {icon:man}).addTo(map);
+      var marker6 = L.marker([26.47278193530995, 73.11367978524191], {icon:redIcon}).addTo(map);
+      var marker7 = L.marker([26.471110848560432, 73.11198960989715],{icon:bike}).addTo(map);
+      var marker8 = L.marker([26.479350799700075, 73.11608098447324], {icon:redIcon}).addTo(map)
+
+    
+      marker.on('click',function(e) {
+      console.log(e)
+      // var newMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+      var pos = map.latLngToLayerPoint(marker.getLatLng())
+	    pos.y -= 25;
+	    var fx = new L.PosAnimation();
+
+	    fx.once('end',function(){
+		    pos.y += 25;
+		  fx.run(marker._icon, pos, 0.8);
+	    });
+
+	    fx.run(marker._icon, pos, 0.3);
+      L.Routing.control({
+        waypoints: [
+          L.latLng(26.465895749384593,73.1151375786186),
+          L.latLng(26.47336296840691,73.11549274391665)
+        ],
+      })
+      .on('routesfound', function(e) {
+        var routes = e.routes;
+        console.log(routes);
+        e.routes[0].coordinates.forEach(function(coord,index){
+          setTimeout(function() {
+            marker.setLatLng([coord.lat,coord.lng]);
+          },100*index)
+        })
+      }).addTo(map);
+    })
+  
+ 
+      // ------------------------
+
+      marker3.on('click',function(e) {
+      console.log(e)
+      // var newMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+      var pos = map.latLngToLayerPoint(marker3.getLatLng())
+	    pos.y -= 25;
+	    var fx = new L.PosAnimation();
+
+	    fx.once('end',function(){
+		    pos.y += 25;
+		  fx.run(marker3._icon, pos, 0.8);
+	    });
+
+	    fx.run(marker3._icon, pos, 0.3);  
+
+      L.Routing.control({
+        waypoints: [
+          L.latLng(26.46623190470775, 73.11196505676078),
+          L.latLng(26.472489016685753, 73.11527823273175)
+        ],
+      })
+      .on('routesfound', function(e) {
+        var routes = e.routes;
+        console.log(routes);
+        e.routes[0].coordinates.forEach(function(coord,index){
+          setTimeout(function() {
+            marker3.setLatLng([coord.lat,coord.lng]);
+          },200*index)
+        })
+      }).addTo(map);
+    })
+
+marker5.on('click',function(e) {
+      console.log(e)
+      // var newMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+      var pos = map.latLngToLayerPoint(marker5.getLatLng())
+	    pos.y -= 25;
+	    var fx = new L.PosAnimation();
+
+	    fx.once('end',function(){
+		    pos.y += 25;
+		  fx.run(marker5._icon, pos, 0.8);
+	    });
+
+	    fx.run(marker5._icon, pos, 0.3);
+
+      L.Routing.control({
+        waypoints: [
+          L.latLng(26.475768702316184, 73.12064166652914),
+          L.latLng(26.47278193530995, 73.11367978524191)
+        ],
+      })
+      .on('routesfound', function(e) {
+        var routes = e.routes;
+        console.log(routes);
+        e.routes[0].coordinates.forEach(function(coord,index){
+          setTimeout(function() {
+            marker5.setLatLng([coord.lat,coord.lng]);
+          },100*index)
+        })
+      }).addTo(map);
+});
+
+marker7.on('click',function(e) {
+      console.log(e)
+      // var newMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+      var pos = map.latLngToLayerPoint(marker7.getLatLng())
+	    pos.y -= 25;
+	    var fx = new L.PosAnimation();
+
+	    fx.once('end',function(){
+		    pos.y += 25;
+		  fx.run(marker7._icon, pos, 0.8);
+	    });
+
+	    fx.run(marker7._icon, pos, 0.3);
+      L.Routing.control({
+        waypoints: [
+          L.latLng(26.471110848560432, 73.11198960989715),
+          L.latLng(26.479350799700075, 73.11608098447324)
+        ],
+      })
+      .on('routesfound', function(e) {
+        var routes = e.routes;
+        console.log(routes);
+        e.routes[0].coordinates.forEach(function(coord,index){
+          setTimeout(function() {
+            marker7.setLatLng([coord.lat,coord.lng]);
+          },100*index)
+        })
+      }).addTo(map);
+    })
+	    
+// var latlngs = [
+//     [26.473223712808057, 73.11380982398988],
+//     [26.472479412783798, 73.11376154422761],
+//     [26.47246980888106, 73.11417460441591],
+//     [26.47279634112469, 73.11419606208803], 
+//     [26.472791539186638, 73.11405122280122], 
+//     [26.472849162429963, 73.11405122280122], 
+//     [26.472849162429963, 73.11419069767], 
+//     [26.47297881462191, 73.11419606208803],
+//     [26.47298841848216, 73.11406731605531],
+//     [26.47303643777142, 73.11406731605531],
+//     [26.473031635843395, 73.11424970626832],
+//     [26.473074853188397, 73.11424970626832],
+//     [26.473074853188397, 73.11429798603059], 
+//     [26.47315648590692, 73.11429798603059],
+//     [26.47315648590692, 73.11426043510438], 
+//     [26.47320450512603, 73.11425507068635]
+
+// ];     Code to shade a polygon (In this case, LHC).
+
+var polygon = L.polygon(latlngs, {color: 'blue'});
+// polygon.setStyle({fillColor: '#00ff00'})
+polygon.addTo(map);
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.pmalatest/dist/leaflet.pm.css" />
+    <link rel="'stylesheet" href="nouislider.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet. markercluster@1.3.0/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="'stylesheet" href="https://unpkg.com/leaflet.markercluster@1,3.0/dist/MarkerCluster.Default.css"/>
+    <script type="text/javascript" src="MovingMarker.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <style>
+      #map {position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+      
+    </style>
+    <a href="https://www.flaticon.com/free-icons/map-marker" title="map marker icons">Map marker icons created by Freepik - Flaticon</a>
+  </head>
+  <body>
+    <div id="map">
+
+    </div>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+      var map = L.map('map', {
+    center: [26.4745,73.12],
+    zoom: 16.6
+});
+
+      L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=96s2uc8tHryEc9jfNqir',{
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 4,
+        mazZoom: 30,
+        crossOrigin: true
+      }).addTo(map);
+      var marker = L.marker([26.4745,73.12]).addTo(map); //athletics
+      // var marker2 = L.marker([26.475,73.115]).addTo(map);
+
+    map.on('click',function(e) {
+      console.log(e)
+      var newMarker = L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+      L.Routing.control({
+        waypoints: [
+          L.latLng(26.4745,73.12),
+          L.latLng(e.latlng.lat,e.latlng.lng)
+        ],
+      })
+      .on('routesfound', function(e) {
+        var routes = e.routes;
+        console.log(routes);
+        e.routes[0].coordinates.forEach(function(coord,index){
+          setTimeout(function() {
+            marker.setLatLng([coord.lat,coord.lng]);
+          },100*index)
+        })
+      }).addTo(map);
+
+
+
+    </script>
+  </body>
+</html>
